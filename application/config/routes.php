@@ -54,10 +54,24 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 /* API */
-$route['product'] = 'api/Product';
-$route['product/(:any)'] = 'api/Product/$1';
-$route['product/(:num)']['PUT'] = 'api/Product/$1';
-$route['product/(:num)']['DELETE'] = 'api/Product/$1';
+
+// endponints for categories
+// $route['api/categories'] = 'api/Category';
+// $route['api/categories/(:num)'] = 'api/Category/$1';
+// $route['api/categories'] = 'api/Category/index_post/index_post';
+
+$route['/api/categories/(:num)']['PUT'] = 'api/Categories/$1';
+$route['/api/categories/(:num)']['DELETE'] = 'api/Category/$1';
+
+// endpoints for products
+// $route['api/products'] = 'api/Product';
+// $route['api/products/(:num)'] = 'api/Product/$1';
+// $route['api/products'] = 'api/Product';
+// $route['api/products/(:num)'] = 'api/Product/1';
+// $route['api/products/(:num)'] = 'api/Product/$1';
+
+
+
 $route['register'] = 'api/User/register';
 $route['login'] = 'api/User/login';
 $route['logout'] = 'api/User/logout';
