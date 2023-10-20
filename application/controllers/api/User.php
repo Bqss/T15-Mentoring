@@ -58,21 +58,21 @@ class User extends REST_Controller
     public function register_post()
     {
         // set validation rules
+        $this->form_validation->reset_validation();
+        $this->form_validation->set_data($this->post());
         $this->form_validation->set_rules('username', 'Username', 'trim|required|alpha_numeric|min_length[4]|is_unique[users.username]', array('is_unique' => 'This username already exists. Please choose another one.'));
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
         //$this->form_validation->set_rules('password_confirm', 'Confirm Password', 'trim|required|min_length[6]|matches[password]');
 
         if ($this->form_validation->run() === false) {
-
-            // validation not ok, send validation errors to the view
             $this->response(['Validation rules violated'], REST_Controller::HTTP_OK);
         } else {
 
             // set variables from the form
-            $username = $this->input->post('username');
-            $email    = $this->input->post('email');
-            $password = $this->input->post('password');
+            $username = $this->post('username');
+            $email    = $this->post('email');
+            $password = $this->post('password');
 
             if ($res = $this->user_model->create_user($username, $email, $password)) {
                 // user creation ok
@@ -104,6 +104,8 @@ class User extends REST_Controller
     {
 
         // set validation rules
+        $this->form_validation->reset_validation();
+        $this->form_validation->set_data($this->post());
         $this->form_validation->set_rules('username', 'Username', 'required|alpha_numeric');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
@@ -114,8 +116,8 @@ class User extends REST_Controller
         } else {
 
             // set variables from the form
-            $username = $this->input->post('username');
-            $password = $this->input->post('password');
+            $username = $this->post('username');
+            $password = $this->post('password');
 
             if ($this->user_model->resolve_user_login($username, $password)) {
 
