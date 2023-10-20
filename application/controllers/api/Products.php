@@ -66,6 +66,10 @@ class Products extends REST_Controller
                     'message' => "Product with id $id is no found"
                 ], REST_Controller::HTTP_NOT_FOUND);
             }
+            $this->response([
+                "message" => "Success Get the Products",
+                "data" => $products
+            ], REST_Controller::HTTP_OK);
         } else {
             $products = $this->Product_model->show();
         }
@@ -91,7 +95,17 @@ class Products extends REST_Controller
                 "errors" => $this->form_validation->error_array()
             ], REST_Controller::HTTP_UNPROCESSABLE_ENTITY);
         } else {
-            $this->Product_model->insert($this->post());
+            $product = $this->Product_model->insert($this->post());
+            if($product){
+                $this->response([
+                    'message'=> "Success Create the product",
+                    'data' => $product
+                ],REST_Controller::HTTP_CREATED);
+            }else {
+                $this->response([
+                    'message' => "Failed to create the product, Server error",
+                ],500);
+            }
         }
     }
 
