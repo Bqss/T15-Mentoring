@@ -34,7 +34,8 @@ class Product_model extends CI_Model {
     public function insert($data)
     {
         $this->db->insert('products',$data);
-        return $this->db->insert_id(); 
+        $res = $this->db->get_where('products',['id' => $this->db->insert_id()],1)->result();
+        return $res; 
     } 
      
     /**
@@ -45,7 +46,6 @@ class Product_model extends CI_Model {
     public function update($data, $id)
     {
         $data = $this->db->update('products', $data, array('id'=>$id));
-        //echo $this->db->last_query();
 		return $this->db->affected_rows();
     }
      
@@ -58,5 +58,30 @@ class Product_model extends CI_Model {
     {
         $this->db->delete('products', array('id'=>$id));
         return $this->db->affected_rows();
+    }
+
+    public function rules(){
+        return [
+            [
+              "field" => "name",
+              "label" => "Product Name",
+              "rules" => "required"
+            ],
+            [
+              "field" => "category_id",
+              "label" => "Product Category",
+              "rules" => "required|integer"
+            ],
+            [
+              "field" => "price",
+              "label" => "Product Price",
+              "rules" => "required|numeric|less_than_equal_to[99999999.99]"
+            ],
+            [
+              "field" => "quantity",
+              "label" => "Product Quantity",
+              "rules" => "integer"
+            ],
+        ];
     }
 }
