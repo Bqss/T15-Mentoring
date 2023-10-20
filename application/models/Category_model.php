@@ -16,7 +16,7 @@ class Category_model extends CI_Model {
      *
      * @return Response
     */
-	public function show($id)
+	public function show(?string $id = null)
 	{
         if(!empty($id)){
             $query = $this->db->get_where("categories", ['id' => $id])->row_array()??[];
@@ -54,8 +54,7 @@ class Category_model extends CI_Model {
      *
      * @return Response
     */
-    public function delete($id)
-    {
+    public function delete ($id)  {
         $this->db->delete('categories', array('id'=>$id));
         return $this->db->affected_rows();
     }
