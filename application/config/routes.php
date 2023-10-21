@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+
 $route['default_controller'] = '';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
@@ -56,21 +57,13 @@ $route['translate_uri_dashes'] = FALSE;
 /* API */
 
 // endponints for categories
-// $route['api/categories'] = 'api/Category';
-// $route['api/categories/(:num)'] = 'api/Category/$1';
-// $route['api/categories'] = 'api/Category/index_post/index_post';
 
-// $route['/api/categories/(:num)']['PUT'] = 'api/Categories/$1';
-// $route['/api/categories/(:num)']['DELETE'] = 'api/Category/$1';
+$route['api/categories/(:num)/update']['POST'] = 'api/categories/update/$1';
+$route['api/categories/(:num)/destroy']['POST'] = 'api/categories/delete/$1';
 
 // endpoints for products
-// $route['api/products'] = 'api/Product';
-// $route['api/products/(:num)'] = 'api/Product/$1';
-// $route['api/products'] = 'api/Product';
-// $route['api/products/(:num)']['PUT'] = 'api/Product/1';
-// $route['api/products/(:num)']['DELETE'] = 'api/Product/$1';
-
-
+$route['api/products/(:num)/update']['POST'] = 'api/products/update/$1';
+$route['api/products/(:num)/destroy']['POST'] = 'api/products/delete/$1';
 
 $route['register'] = 'api/User/register';
 $route['login'] = 'api/User/login';

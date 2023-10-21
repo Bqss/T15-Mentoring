@@ -114,10 +114,10 @@ class Products extends REST_Controller
      *
      * @return Response
      */
-    public function index_put($id)
+    public function update_post($id)
     {
         $this->form_validation->reset_validation();
-        $this->form_validation->set_data($this->put());
+        $this->form_validation->set_data($this->post());
         $this->form_validation->set_rules($this->Product_model->rules());
 
         if ($this->form_validation->run() == FALSE) {
@@ -127,7 +127,7 @@ class Products extends REST_Controller
             ], REST_Controller::HTTP_UNPROCESSABLE_ENTITY);
         } else {
             if ($this->Product_model->show($id)) {
-                $this->Product_model->update($this->put(), $id);
+                $this->Product_model->update($this->post(), $id);
                 return $this->response([
                     "message" => "Success Update the Product",
                 ], REST_Controller::HTTP_OK);
@@ -144,7 +144,7 @@ class Products extends REST_Controller
      *
      * @return Response
      */
-    public function index_delete($id)
+    public function delete_post($id)
     {
         if($this->Product_model->delete($id)) {
             $this->response([
