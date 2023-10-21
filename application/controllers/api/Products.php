@@ -128,6 +128,11 @@ class Products extends REST_Controller
         } else {
             if ($this->Product_model->show($id)) {
                 $this->Product_model->update($this->post(), $id);
+                if($this->db->error()){
+                    return $this->response([
+                        "message" => "Failed Update the Product", $this->db->error()['message'],
+                    ], REST_Controller::HTTP_OK);
+                }
                 return $this->response([
                     "message" => "Success Update the Product",
                 ], REST_Controller::HTTP_OK);

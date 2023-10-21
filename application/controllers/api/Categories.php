@@ -121,7 +121,6 @@ class Categories extends REST_Controller
                     'message' => 'Berhasil Update Category',
                 ], REST_Controller::HTTP_OK);
             } else {
-                var_dump($this->db->error());
                 $this->response([
                     'message' => 'Gagal Update Category',
                 ], 500);
@@ -141,7 +140,7 @@ class Categories extends REST_Controller
             if($this->db->error()){
                 $this->response([
                     "message" => "Gagal menghapus Category, ".$this->db->error()['message']
-                ]);
+                ],400);
             }
             
             return $this->response([
@@ -150,7 +149,7 @@ class Categories extends REST_Controller
         }
 
         return $this->response([
-            "message" => "Gagal menghapus Category"
+            "message" => "Gagal menghapus Category, category tidak ditemukan"
         ], 500);
     }
 }
