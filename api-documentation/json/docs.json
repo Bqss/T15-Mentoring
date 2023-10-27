@@ -1,0 +1,790 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Tugas Mentoring 16 - API Documentation",
+    "description": "Documentation for the API endpoints provided by https://tugas-mentoring15.000webhostapp.com/",
+    "version": "1.0.0"
+  },
+  "host": "tugas-mentoring15.000webhostapp.com",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "untuk melakukan otentikasi dan mendapatkan token."
+    },
+    {
+      "name": "category",
+      "description": "untuk mengelola semua kategori produk."
+    },
+    {
+      "name": "products",
+      "description": "untuk mengelola semua produk."
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register user",
+        "consumes": [
+          "application/json"
+        ],
+        "produce": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "422": {
+            "description": "Unprocessable content",
+            "schema": {
+              "$ref": "#/definitions/response_failed"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "name": "payload",
+            "schema": {
+              "$ref": "#/definitions/payload_register"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "produce": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful login",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "auth": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "stirng"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "expires_at": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessble content",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/response_failed"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "body",
+            "name": "payload",
+            "schema": {
+              "$ref": "#/definitions/payload_login"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produce": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful logout",
+            "schema": {
+              "type": "array",
+              "item": "string"
+            }
+          },
+          "400": {
+            "description": "bad request"
+          }
+        },
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "username",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Menampilkan semua kategori",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/response_base_withdata"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Tambah kategori",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful add category",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "422": {
+            "description": "Unprocessible content",
+            "schema": {
+              "$ref": "#/definitions/response_failed"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/category_payload"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/categories/{id}": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Menampilkan detail kategori",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful get category detail",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/category"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "category not found",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID kategori",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/categories/{id}/update": {
+      "post": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Memperbarui kategori",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful add category",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/category"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "category not found",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "422": {
+            "description": "Unprocessible content",
+            "schema": {
+              "$ref": "#/definitions/response_failed"
+            }
+          },
+          "500": {
+            "description": "server error",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID kategori",
+            "type": "integer"
+          },
+          {
+            "name": "payload",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/category_payload"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/categories/{id}/destroy": {
+      "post": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Menghapus kategori",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "404": {
+            "description": "category not found",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID kategori",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Menampilkan semua produk",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/response_base_withdataproduct"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Tambah produk",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "successful add product",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "schema": "$ref:\"#/definitions/product\""
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessible content",
+            "schema": {
+              "$ref": "#/definitions/response_failed"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "payload",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/product_payload"
+            },
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Menampilkan detail produk",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful get product detail",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "schema": {
+                    "$ref": "#/definitions/product"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "product not found",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID product",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/update": {
+      "post": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Memperbarui produk",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful edit product",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/category"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "product not found",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "422": {
+            "description": "Unprocessible content",
+            "schema": {
+              "$ref": "#/definitions/response_failed"
+            }
+          },
+          "500": {
+            "description": "server error",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID product",
+            "type": "integer"
+          },
+          {
+            "name": "payload",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/product_payload"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/destroy": {
+      "post": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Menghapus produk",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful delete product",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          },
+          "404": {
+            "description": "product not found",
+            "schema": {
+              "$ref": "#/definitions/response_base"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID product",
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "response_base": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "response_base_withdata": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/category"
+          }
+        }
+      }
+    },
+    "response_base_withdataproduct": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/product"
+          }
+        }
+      }
+    },
+    "response_failed": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "payload_register": {
+      "type": "object",
+      "properties": {
+        "username*": {
+          "type": "string"
+        },
+        "email*": {
+          "type": "string"
+        },
+        "password*": {
+          "type": "string"
+        }
+      }
+    },
+    "payload_login": {
+      "type": "object",
+      "properties": {
+        "username*": {
+          "type": "string"
+        },
+        "password*": {
+          "type": "string"
+        }
+      }
+    },
+    "category_payload": {
+      "type": "object",
+      "properties": {
+        "name*": {
+          "type": "string"
+        }
+      }
+    },
+    "product_payload": {
+      "type": "object",
+      "properties": {
+        "name *": {
+          "type": "string"
+        },
+        "category_id *": {
+          "type": "string"
+        },
+        "price *": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

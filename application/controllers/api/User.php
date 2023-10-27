@@ -66,7 +66,10 @@ class User extends REST_Controller
         //$this->form_validation->set_rules('password_confirm', 'Confirm Password', 'trim|required|min_length[6]|matches[password]');
 
         if ($this->form_validation->run() === false) {
-            $this->response(['Validation rules violated'], REST_Controller::HTTP_OK);
+            $this->response([
+                "message" => "Failed Register",
+                "errors" => $this->form_validation->error_array()
+            ], REST_Controller::HTTP_UNPROCESSABLE_ENTITY);
         } else {
 
             // set variables from the form
